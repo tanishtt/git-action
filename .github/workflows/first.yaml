@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: step 1 Checkout Repository 
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: step 2 hello world
         run: echo "hello ji... "
         shell: bash
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: step1 checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: step2 goodbye
         run: echo "goodbye..."
         shell: bash
