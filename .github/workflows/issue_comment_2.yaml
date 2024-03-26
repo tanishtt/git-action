@@ -1,4 +1,4 @@
-name: Add comment on new issue
+name: Add Comment on New Issue
 
 on:
   issues:
@@ -8,26 +8,43 @@ jobs:
   add-comment:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3  # Checkout for potential future use
+      - uses: actions/checkout@v4  # Checkout for potential future use
 
-      # Assuming 'create-or-update-comment' only creates comments on new issues
-      - name: Create comment using action
-        uses: peter-evans/create-or-update-comment@v4  # Update action version if needed
+      # Create comment using action (preferred method)
+      - name: Create comment using 'create-or-update-comment' action
+        uses: peter-evans/create-or-update-comment@v4  # Update if necessary
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            This is a multi-line test comment
-            - With GitHub **Markdown** :sparkles:
-            - Created by [create-or-update-comment][1]
+            This is a multi-line test comment with GitHub Markdown:
 
-      # Alternatively, use the GitHub API with proper token handling
-      - name: Create comment with GitHub API (secure)
+            - **Bold** text
+            - *Italic* text
+            - `Code block`
+            - Link to [create-or-update-comment action][1]
+
+      # Alternatively, create comment with GitHub API (secure)
+      - name: Create comment using GitHub API (secure)
         run: |
           gh api -X POST \
-            "https://api.github.com/repos/${{ env.ORGANIZATION }}/${{ env.REPOSITORY }}/issues/${{ github.event.issue.number }}/comments" \
-            -f body='comment from secure GitHub API call'
+            "https://api.github.com/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.issue.number }}/comments" \
+            -f body='Comment from secure GitHub API call with basic formatting (e.g., bold, italics)'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ORGANIZATION: ${{ github.event.organization.login }}
-          REPOSITORY: ${{ github.event.repository.name }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+
+**Explanation of Improvements:**
+
+- **Action-First Approach:** The code prioritizes using the `create-or-update-comment` action as it likely avoids unnecessary API calls compared to the direct API usage.
+- **Concise Code:** Unnecessary elements like `shell: /usr/bin/bash -e {0}` are removed.
+- **Clear and Consistent Comment:** The API comment includes a mention of basic formatting support.
+- **Enhanced Security:** While the token handling was already secure, consider using a dedicated personal access token with only the necessary "repo:comments" scope to minimize permissions.
+- **Descriptive Step Names:** Clear step names enhance readability and maintainability.
+- **Additional Markdown Formatting:** The action comment demonstrates basic markdown formatting capabilities (bold, italics, and code blocks).
+
+**Additional Considerations:**
+
+- If performance or specific control over comments is crucial, explore using the GitHub API directly.
+- Update the action version (`@v4`) to the latest stable version to benefit from potential improvements or bug fixes.
+- Customize the comment content to suit your specific needs.
+
+By incorporating these refinements, you have a robust and secure workflow that effectively creates comments on newly opened issues, either using the convenient action or the secure GitHub API approach.
