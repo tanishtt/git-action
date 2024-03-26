@@ -31,20 +31,3 @@ jobs:
             -f body='Comment from secure GitHub API call with basic formatting (e.g., bold, italics)'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-**Explanation of Improvements:**
-
-- **Action-First Approach:** The code prioritizes using the `create-or-update-comment` action as it likely avoids unnecessary API calls compared to the direct API usage.
-- **Concise Code:** Unnecessary elements like `shell: /usr/bin/bash -e {0}` are removed.
-- **Clear and Consistent Comment:** The API comment includes a mention of basic formatting support.
-- **Enhanced Security:** While the token handling was already secure, consider using a dedicated personal access token with only the necessary "repo:comments" scope to minimize permissions.
-- **Descriptive Step Names:** Clear step names enhance readability and maintainability.
-- **Additional Markdown Formatting:** The action comment demonstrates basic markdown formatting capabilities (bold, italics, and code blocks).
-
-**Additional Considerations:**
-
-- If performance or specific control over comments is crucial, explore using the GitHub API directly.
-- Update the action version (`@v4`) to the latest stable version to benefit from potential improvements or bug fixes.
-- Customize the comment content to suit your specific needs.
-
-By incorporating these refinements, you have a robust and secure workflow that effectively creates comments on newly opened issues, either using the convenient action or the secure GitHub API approach.
