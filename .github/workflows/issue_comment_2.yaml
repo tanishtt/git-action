@@ -1,0 +1,33 @@
+name: Add comment on new issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3  # Checkout for potential future use
+
+      # Assuming 'create-or-update-comment' only creates comments on new issues
+      - name: Create comment using action
+        uses: peter-evans/create-or-update-comment@v4  # Update action version if needed
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            This is a multi-line test comment
+            - With GitHub **Markdown** :sparkles:
+            - Created by [create-or-update-comment][1]
+
+      # Alternatively, use the GitHub API with proper token handling
+      - name: Create comment with GitHub API (secure)
+        run: |
+          gh api -X POST \
+            "https://api.github.com/repos/${{ env.ORGANIZATION }}/${{ env.REPOSITORY }}/issues/${{ github.event.issue.number }}/comments" \
+            -f body='comment from secure GitHub API call'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORGANIZATION: ${{ github.event.organization.login }}
+          REPOSITORY: ${{ github.event.repository.name }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
